@@ -923,7 +923,8 @@ module Sinatra
     # file, before any DSL related functions are invoked.
     def self.default_options
       return @default_options unless @default_options.nil?
-      root = File.expand_path(File.dirname($0))
+      app_file = File.expand_path(caller[0][/^(.*?):\d+/, 1])
+      root = File.dirname(app_file)
       @default_options = {
         :run => true,
         :port => 4567,
@@ -934,7 +935,7 @@ module Sinatra
         :public => root + '/public',
         :sessions => false,
         :logging => true,
-        :app_file => $0,
+        :app_file => app_file,
         :raise_errors => false
       }
       load_default_options_from_command_line!
